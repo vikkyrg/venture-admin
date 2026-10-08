@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import Badge from '../components/Badge';
 import { getCourses, createCourse, updateCourse, deleteCourse } from '../services/api';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { generateSlug } from '../utils/generateSlug';
 
 const CoursesManager = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -16,7 +18,8 @@ const CoursesManager = () => {
     description: '',
     duration: '8 Weeks',
     level: 'All Levels',
-    mode: 'Live Online',
+    deliveryMode: 'online',
+    handsOnProjects: true,
     status: 'published',
     featured: false
   });
@@ -37,7 +40,17 @@ const CoursesManager = () => {
     fetchCourses();
   }, []);
 
+  const handleTitleChange = (e) => {
+    const val = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      title: val,
+      slug: isSlugManuallyEdited ? prev.slug : generateSlug(val)
+    }));
+  };
+
   const handleOpenModal = (course = null) => {
+    setIsSlugManuallyEdited(false);
     if (course) {
       setEditingCourse(course);
       setFormData({
@@ -47,7 +60,8 @@ const CoursesManager = () => {
         description: course.description || '',
         duration: course.duration || '8 Weeks',
         level: course.level || 'All Levels',
-        mode: course.mode || 'Live Online',
+        deliveryMode: course.deliveryMode || 'online',
+        handsOnProjects: course.handsOnProjects ?? true,
         status: course.status || 'published',
         featured: course.featured || false
       });
@@ -60,12 +74,19 @@ const CoursesManager = () => {
         description: '',
         duration: '8 Weeks',
         level: 'All Levels',
-        mode: 'Live Online',
+        deliveryMode: 'online',
+        handsOnProjects: true,
         status: 'published',
         featured: false
       });
     }
     setIsModalOpen(true);
+  };
+
+  const formatDeliveryMode = (val) => {
+    if (val === 'offline') return 'Offline';
+    if (val === 'online_offline') return 'Online + Offline';
+    return 'Online';
   };
 
   const handleSubmit = async (e) => {
@@ -116,7 +137,7 @@ const CoursesManager = () => {
 
         <button
           onClick={() => handleOpenModal()}
-          className="px-4 py-2.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs uppercase tracking-wider shadow flex items-center gap-2 transition-all"
+          className="px-4 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider shadow flex items-center gap-2 transition-all"
         >
           <FaPlus />
           Add New Course
@@ -131,6 +152,7 @@ const CoursesManager = () => {
               <th className="py-4 px-6">Course Name</th>
               <th className="py-4 px-6">Slug</th>
               <th className="py-4 px-6">Duration / Level</th>
+              <th className="py-4 px-6">Delivery & Projects</th>
               <th className="py-4 px-6">Status</th>
               <th className="py-4 px-6 text-right">Actions</th>
             </tr>
@@ -144,8 +166,12 @@ const CoursesManager = () => {
                   <div>{c.title}</div>
                   <div className="text-[10px] text-slate-500 font-normal line-clamp-1">{c.shortDescription}</div>
                 </td>
-                <td className="py-4 px-6 text-teal-700 font-mono text-[11px] font-semibold">{c.slug}</td>
+                <td className="py-4 px-6 text-blue-700 font-mono text-[11px] font-semibold">{c.slug}</td>
                 <td className="py-4 px-6 text-slate-600">{c.duration} • {c.level}</td>
+                <td className="py-4 px-6">
+                  <div className="text-slate-600 font-medium">{formatDeliveryMode(c.deliveryMode)}</div>
+                  <div className="text-[10px] text-slate-500 mt-1">Projects: {c.handsOnProjects ? 'Included' : 'Not Included'}</div>
+                </td>
                 <td className="py-4 px-6">
                   <button onClick={() => toggleStatus(c)} title="Click to toggle status">
                     <Badge status={c.status} />
@@ -154,7 +180,7 @@ const CoursesManager = () => {
                 <td className="py-4 px-6 text-right space-x-2">
                   <button
                     onClick={() => handleOpenModal(c)}
-                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-teal-700 border border-slate-200 transition-colors"
+                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-blue-700 border border-slate-200 transition-colors"
                     title="Edit"
                   >
                     <FaEdit />
@@ -189,8 +215,8 @@ const CoursesManager = () => {
                     type="text"
                     required
                     value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                    onChange={handleTitleChange}
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                   />
                 </div>
                 <div>
@@ -199,8 +225,11 @@ const CoursesManager = () => {
                     type="text"
                     required
                     value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-teal-600 focus:bg-white"
+                    onChange={(e) => {
+                      setIsSlugManuallyEdited(true);
+                      setFormData({ ...formData, slug: e.target.value });
+                    }}
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-blue-600 focus:bg-white"
                   />
                 </div>
               </div>
@@ -211,7 +240,7 @@ const CoursesManager = () => {
                   type="text"
                   value={formData.shortDescription}
                   onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
 
@@ -221,18 +250,18 @@ const CoursesManager = () => {
                   rows="3"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Duration</label>
                   <input
                     type="text"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                   />
                 </div>
                 <div>
@@ -241,15 +270,43 @@ const CoursesManager = () => {
                     type="text"
                     value={formData.level}
                     onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Delivery Mode *</label>
+                  <select
+                    value={formData.deliveryMode}
+                    onChange={(e) => setFormData({ ...formData, deliveryMode: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
+                    required
+                  >
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                    <option value="online_offline">Online + Offline</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Hands-on Projects *</label>
+                  <select
+                    value={formData.handsOnProjects.toString()}
+                    onChange={(e) => setFormData({ ...formData, handsOnProjects: e.target.value === 'true' })}
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
+                    required
+                  >
+                    <option value="true">Included</option>
+                    <option value="false">Not Included</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                   >
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
@@ -267,7 +324,7 @@ const CoursesManager = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-lg bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow"
+                  className="px-6 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow"
                 >
                   Save Course
                 </button>

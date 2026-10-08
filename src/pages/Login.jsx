@@ -56,7 +56,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@venturesoft.com"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
           </div>
@@ -71,7 +71,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
           </div>
@@ -79,14 +79,14 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs uppercase tracking-wider shadow transition-all mt-2"
+            className="w-full py-3 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider shadow transition-all mt-2"
           >
             {loading ? 'Authenticating...' : 'Sign In To Dashboard'}
           </button>
         </form>
 
         <div className="text-center pt-2 border-t border-slate-100 text-[11px] text-slate-400">
-          Default seed credentials: <code className="text-teal-700 font-bold font-mono">admin@venturesoft.com / admin123</code>
+          Default seed credentials: <code className="text-blue-700 font-bold font-mono">admin@venturesoft.com / admin123</code>
         </div>
 
       </div>

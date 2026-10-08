@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Badge from '../components/Badge';
 import { getCourses, getModulesByCourse, createModule, updateModule, deleteModule } from '../services/api';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { generateSlug } from '../utils/generateSlug';
 
 const ModulesManager = () => {
   const [courses, setCourses] = useState([]);
@@ -56,24 +57,14 @@ const ModulesManager = () => {
     fetchModules();
   }, [selectedCourseId]);
 
-  const slugify = (text) => {
-    return text
-      .toString()
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
-  };
+
 
   const handleTitleChange = (e) => {
     const val = e.target.value;
     setFormData((prev) => ({
       ...prev,
       title: val,
-      slug: isSlugManuallyEdited ? prev.slug : slugify(val)
+      slug: isSlugManuallyEdited ? prev.slug : generateSlug(val)
     }));
   };
 
@@ -149,7 +140,7 @@ const ModulesManager = () => {
           <select
             value={selectedCourseId}
             onChange={(e) => setSelectedCourseId(e.target.value)}
-            className="px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold focus:outline-none focus:border-teal-600 shadow-sm"
+            className="px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold focus:outline-none focus:border-blue-600 shadow-sm"
           >
             {courses.map((c) => (
               <option key={c._id} value={c._id}>{c.title}</option>
@@ -159,7 +150,7 @@ const ModulesManager = () => {
           <button
             onClick={() => handleOpenModal()}
             disabled={!selectedCourseId}
-            className="px-4 py-2.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors shadow disabled:opacity-50"
+            className="px-4 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-colors shadow disabled:opacity-50"
           >
             <FaPlus />
             Add Module
@@ -184,12 +175,12 @@ const ModulesManager = () => {
             ) : modules.length > 0 ? (
               modules.map((m) => (
                 <tr key={m._id} className="hover:bg-slate-50 transition-colors">
-                  <td className="py-4 px-6 font-mono text-teal-700 font-bold">#{m.order}</td>
+                  <td className="py-4 px-6 font-mono text-blue-700 font-bold">#{m.order}</td>
                   <td className="py-4 px-6 font-bold text-slate-900">{m.title}</td>
                   <td className="py-4 px-6 text-slate-600 font-mono text-[11px]">{m.slug}</td>
                   <td className="py-4 px-6"><Badge status={m.status} /></td>
                   <td className="py-4 px-6 text-right space-x-2">
-                    <button onClick={() => handleOpenModal(m)} className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-teal-700 border border-slate-200"><FaEdit /></button>
+                    <button onClick={() => handleOpenModal(m)} className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-blue-700 border border-slate-200"><FaEdit /></button>
                     <button onClick={() => handleDelete(m._id)} className="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-rose-600 border border-slate-200"><FaTrash /></button>
                   </td>
                 </tr>
@@ -214,7 +205,7 @@ const ModulesManager = () => {
                   value={formData.title}
                   onChange={handleTitleChange}
                   placeholder="e.g. Introduction to HTML"
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
               <div>
@@ -228,7 +219,7 @@ const ModulesManager = () => {
                     setFormData({ ...formData, slug: e.target.value });
                   }}
                   placeholder="e.g. introduction-to-html"
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-teal-600 focus:bg-white"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
               <div>
@@ -238,7 +229,7 @@ const ModulesManager = () => {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Short description of module..."
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                  className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -249,7 +240,7 @@ const ModulesManager = () => {
                     min="1"
                     value={formData.order}
                     onChange={(e) => setFormData({ ...formData, order: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                   />
                 </div>
                 <div>
@@ -257,7 +248,7 @@ const ModulesManager = () => {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white"
+                    className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
                   >
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
@@ -266,7 +257,7 @@ const ModulesManager = () => {
               </div>
               <div className="flex justify-end gap-3 pt-2 border-t border-slate-100">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold hover:bg-slate-200">Cancel</button>
-                <button type="submit" className="px-6 py-2 rounded-lg bg-teal-700 text-white text-xs font-bold shadow hover:bg-teal-800">Save Module</button>
+                <button type="submit" className="px-6 py-2 rounded-lg bg-blue-700 text-white text-xs font-bold shadow hover:bg-blue-800">Save Module</button>
               </div>
             </form>
           </div>

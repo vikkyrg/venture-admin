@@ -62,14 +62,14 @@ const EnquiriesManager = () => {
               placeholder="Search enquiries..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs shadow-sm focus:outline-none focus:border-teal-600"
+              className="pl-9 pr-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-900 text-xs shadow-sm focus:outline-none focus:border-blue-600"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-sm focus:outline-none focus:border-teal-600"
+            className="px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-sm focus:outline-none focus:border-blue-600"
           >
             <option value="">All Statuses</option>
             <option value="New">New</option>
@@ -104,12 +104,12 @@ const EnquiriesManager = () => {
                     <div>{e.email}</div>
                     <div className="text-[10px] text-slate-400">{e.phone}</div>
                   </td>
-                  <td className="py-4 px-6 font-semibold text-teal-700">{e.course}</td>
+                  <td className="py-4 px-6 font-semibold text-blue-700">{e.course}</td>
                   <td className="py-4 px-6">
                     <select
                       value={e.status}
                       onChange={(evt) => handleStatusChange(e._id, evt.target.value)}
-                      className="bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-md px-2 py-1 font-semibold focus:outline-none focus:border-teal-600"
+                      className="bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-md px-2 py-1 font-semibold focus:outline-none focus:border-blue-600"
                     >
                       <option value="New">New</option>
                       <option value="Contacted">Contacted</option>

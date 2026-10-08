@@ -34,7 +34,7 @@ const Sidebar = () => {
           <Link to="/admin" className="flex items-center gap-3">
             <img src={logo} alt="Venture Soft Admin" className="h-9 w-auto object-contain" />
           </Link>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 mt-2 block">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 mt-2 block">
             Admin Control Center
           </span>
         </div>
@@ -49,11 +49,11 @@ const Sidebar = () => {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-teal-50 text-teal-800 font-bold border-l-4 border-teal-700'
+                    ? 'bg-blue-50 text-blue-800 font-bold border-l-4 border-blue-700'
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
-                <span className={`text-sm ${isActive ? 'text-teal-700' : 'text-slate-400'}`}>{item.icon}</span>
+                <span className={`text-sm ${isActive ? 'text-blue-700' : 'text-slate-400'}`}>{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
             );

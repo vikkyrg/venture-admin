@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 import StatCard from '../components/StatCard';
 import Badge from '../components/Badge';
-import { getCourses, getEnquiries } from '../services/api';
+import { getEnquiries, getDashboardStats } from '../services/api';
 import { FaBook, FaLayerGroup, FaListAlt, FaEnvelope } from 'react-icons/fa';
 
 const Dashboard = () => {
-  const [courses, setCourses] = useState([]);
+  const [stats, setStats] = useState({
+    totalCourses: 0,
+    publishedCourses: 0,
+    totalModules: 0,
+    publishedModules: 0,
+    totalTopics: 0,
+    publishedTopics: 0,
+    totalEnquiries: 0,
+    pendingEnquiries: 0
+  });
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,11 +22,13 @@ const Dashboard = () => {
     const fetchMetrics = async () => {
       try {
         setLoading(true);
-        const [courseRes, enquiryRes] = await Promise.all([
-          getCourses(),
+        const [statsRes, enquiryRes] = await Promise.all([
+          getDashboardStats(),
           getEnquiries()
         ]);
-        setCourses(courseRes.data || []);
+        if (statsRes && statsRes.data) {
+          setStats(statsRes.data);
+        }
         setEnquiries(enquiryRes.data || []);
       } catch (err) {
         console.error('Failed to load metrics:', err);
@@ -28,7 +39,7 @@ const Dashboard = () => {
     fetchMetrics();
   }, []);
 
-  const publishedCoursesCount = courses.filter((c) => c.status === 'published').length;
+
 
   return (
     <div className="space-y-8">
@@ -43,26 +54,26 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Total Courses"
-          value={courses.length}
-          subtitle={`${publishedCoursesCount} Published`}
+          value={stats.totalCourses}
+          subtitle={`${stats.publishedCourses} Published`}
           icon={<FaBook />}
         />
         <StatCard
           title="Total Modules"
-          value={courses.reduce((acc, c) => acc + (c.modulesCount || 8), 0)}
-          subtitle="Dynamic MongoDB Structures"
+          value={stats.totalModules}
+          subtitle={`${stats.publishedModules} Published Modules`}
           icon={<FaLayerGroup />}
         />
         <StatCard
           title="Active Syllabi Topics"
-          value={courses.reduce((acc, c) => acc + (c.topicsCount || 3), 0)}
-          subtitle="Detailed Lesson Notes"
+          value={stats.totalTopics}
+          subtitle={`${stats.publishedTopics} Published Topics`}
           icon={<FaListAlt />}
         />
         <StatCard
           title="Student Enquiries"
-          value={enquiries.length}
-          subtitle={`${enquiries.filter(e => e.status === 'New').length} Pending`}
+          value={stats.totalEnquiries}
+          subtitle={`${stats.pendingEnquiries} Pending`}
           icon={<FaEnvelope />}
         />
       </div>
@@ -93,7 +104,7 @@ const Dashboard = () => {
                       <div>{e.email}</div>
                       <div className="text-[10px] text-slate-400">{e.phone}</div>
                     </td>
-                    <td className="py-3 px-4 font-semibold text-teal-700">{e.course}</td>
+                    <td className="py-3 px-4 font-semibold text-blue-700">{e.course}</td>
                     <td className="py-3 px-4"><Badge status={e.status} /></td>
                     <td className="py-3 px-4 text-slate-500">{new Date(e.createdAt).toLocaleDateString()}</td>
                   </tr>

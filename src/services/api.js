@@ -36,6 +36,11 @@ export const getCourses = async () => {
   return response.data;
 };
 
+export const getDashboardStats = async () => {
+  const response = await api.get('/stats/dashboard');
+  return response.data;
+};
+
 export const createCourse = async (courseData) => {
   const response = await api.post('/courses', courseData);
   return response.data;

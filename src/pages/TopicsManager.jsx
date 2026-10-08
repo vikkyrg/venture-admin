@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Badge from '../components/Badge';
 import { getCourses, getModulesByCourse, getTopicsByModule, createTopic, updateTopic, deleteTopic } from '../services/api';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { generateSlug } from '../utils/generateSlug';
 
 const TopicsManager = () => {
   const [courses, setCourses] = useState([]);
@@ -12,6 +13,7 @@ const TopicsManager = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTopic, setEditingTopic] = useState(null);
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -68,7 +70,17 @@ const TopicsManager = () => {
     fetchTopics();
   }, [selectedModuleId]);
 
+  const handleTitleChange = (e) => {
+    const val = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      title: val,
+      slug: isSlugManuallyEdited ? prev.slug : generateSlug(val)
+    }));
+  };
+
   const handleOpenModal = (t = null) => {
+    setIsSlugManuallyEdited(false);
     if (t) {
       setEditingTopic(t);
       setFormData({
@@ -143,7 +155,7 @@ const TopicsManager = () => {
           <select
             value={selectedCourseId}
             onChange={(e) => setSelectedCourseId(e.target.value)}
-            className="px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-sm focus:outline-none focus:border-teal-600"
+            className="px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-sm focus:outline-none focus:border-blue-600"
           >
             {courses.map((c) => (
               <option key={c._id} value={c._id}>{c.title}</option>
@@ -153,7 +165,7 @@ const TopicsManager = () => {
           <select
             value={selectedModuleId}
             onChange={(e) => setSelectedModuleId(e.target.value)}
-            className="px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-sm focus:outline-none focus:border-teal-600"
+            className="px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-sm focus:outline-none focus:border-blue-600"
           >
             {modules.map((m) => (
               <option key={m._id} value={m._id}>{m.title}</option>
@@ -163,7 +175,7 @@ const TopicsManager = () => {
           <button
             onClick={() => handleOpenModal()}
             disabled={!selectedModuleId}
-            className="px-4 py-2.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow disabled:opacity-50 transition-colors"
           >
             <FaPlus />
             Add New Topic
@@ -191,10 +203,10 @@ const TopicsManager = () => {
                     <div>{t.title}</div>
                     <div className="text-[10px] text-slate-500 font-normal line-clamp-1">{t.shortDescription}</div>
                   </td>
-                  <td className="py-4 px-6 text-teal-700 font-mono text-[11px] font-semibold">{t.slug}</td>
+                  <td className="py-4 px-6 text-blue-700 font-mono text-[11px] font-semibold">{t.slug}</td>
                   <td className="py-4 px-6"><Badge status={t.status} /></td>
                   <td className="py-4 px-6 text-right space-x-2">
-                    <button onClick={() => handleOpenModal(t)} className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-teal-700 border border-slate-200"><FaEdit /></button>
+                    <button onClick={() => handleOpenModal(t)} className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-blue-700 border border-slate-200"><FaEdit /></button>
                     <button onClick={() => handleDelete(t._id)} className="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-rose-600 border border-slate-200"><FaTrash /></button>
                   </td>
                 </tr>
@@ -214,37 +226,37 @@ const TopicsManager = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Title *</label>
-                  <input type="text" required value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white" />
+                  <input type="text" required value={formData.title} onChange={handleTitleChange} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white" />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Slug *</label>
-                  <input type="text" required value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-teal-600 focus:bg-white" />
+                  <input type="text" required value={formData.slug} onChange={(e) => { setIsSlugManuallyEdited(true); setFormData({ ...formData, slug: e.target.value }); }} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-blue-600 focus:bg-white" />
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Short Description</label>
-                <input type="text" value={formData.shortDescription} onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white" />
+                <input type="text" value={formData.shortDescription} onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white" />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Detailed Content (Markdown Supported)</label>
-                <textarea rows="6" value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-teal-600 focus:bg-white" />
+                <textarea rows="6" value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-blue-600 focus:bg-white" />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Learning Objectives (One per line)</label>
-                <textarea rows="3" value={formData.learningObjectivesStr} onChange={(e) => setFormData({ ...formData, learningObjectivesStr: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white" />
+                <textarea rows="3" value={formData.learningObjectivesStr} onChange={(e) => setFormData({ ...formData, learningObjectivesStr: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white" />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Subtopics (Comma Separated)</label>
-                <input type="text" value={formData.subTopicsStr} onChange={(e) => setFormData({ ...formData, subTopicsStr: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-teal-600 focus:bg-white" />
+                <input type="text" value={formData.subTopicsStr} onChange={(e) => setFormData({ ...formData, subTopicsStr: e.target.value })} className="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white" />
               </div>
 
               <div className="flex justify-end gap-3 pt-2 border-t border-slate-100">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold hover:bg-slate-200">Cancel</button>
-                <button type="submit" className="px-6 py-2 rounded-lg bg-teal-700 text-white text-xs font-bold shadow hover:bg-teal-800">Save Topic</button>
+                <button type="submit" className="px-6 py-2 rounded-lg bg-blue-700 text-white text-xs font-bold shadow hover:bg-blue-800">Save Topic</button>
               </div>
             </form>
           </div>
