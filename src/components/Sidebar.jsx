@@ -23,7 +23,6 @@ const Sidebar = () => {
     { label: 'Topics', path: '/admin/topics', icon: <FaListAlt /> },
     { label: 'Media Library', path: '/admin/media', icon: <FaImages /> },
     { label: 'Enquiries', path: '/admin/enquiries', icon: <FaEnvelope /> },
-    { label: 'Site Settings', path: '/admin/settings', icon: <FaCog /> },
   ];
 
   return (

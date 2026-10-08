@@ -9,8 +9,6 @@ import ModulesManager from './pages/ModulesManager';
 import TopicsManager from './pages/TopicsManager';
 import MediaManager from './pages/MediaManager';
 import EnquiriesManager from './pages/EnquiriesManager';
-import SettingsManager from './pages/SettingsManager';
-
 function App() {
   return (
     <AuthProvider>
@@ -27,7 +25,6 @@ function App() {
             <Route path="topics" element={<TopicsManager />} />
             <Route path="media" element={<MediaManager />} />
             <Route path="enquiries" element={<EnquiriesManager />} />
-            <Route path="settings" element={<SettingsManager />} />
           </Route>
 
           {/* Fallback */}
