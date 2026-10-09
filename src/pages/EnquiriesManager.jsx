@@ -51,7 +51,7 @@ const EnquiriesManager = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900">Student Enquiry Management</h1>
-          <p className="text-xs text-slate-500 mt-1">Review contact inquiries and update lead conversion statuses.</p>
+          <p className="text-xs text-slate-500 mt-1">Review contact forms and student inquiries and update lead conversion statuses.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -81,7 +81,7 @@ const EnquiriesManager = () => {
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-x-auto shadow-sm">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50">
@@ -101,8 +101,12 @@ const EnquiriesManager = () => {
                 <tr key={e._id} className="hover:bg-slate-50 transition-colors">
                   <td className="py-4 px-6 font-bold text-slate-900">{e.name}</td>
                   <td className="py-4 px-6 text-slate-600">
-                    <div>{e.email}</div>
-                    <div className="text-[10px] text-slate-400">{e.phone}</div>
+                    <div>
+                      <a href={`mailto:${e.email}`} className="hover:text-blue-600 hover:underline">{e.email}</a>
+                    </div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">
+                      <a href={`tel:${e.phone}`} className="hover:text-blue-600 hover:underline">{e.phone}</a>
+                    </div>
                   </td>
                   <td className="py-4 px-6 font-semibold text-blue-700">{e.course}</td>
                   <td className="py-4 px-6">

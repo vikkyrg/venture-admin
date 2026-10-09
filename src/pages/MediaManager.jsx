@@ -80,7 +80,7 @@ const MediaManager = () => {
         ) : mediaFiles.length > 0 ? (
           mediaFiles.map((m) => (
             <div key={m._id} className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm hover:border-blue-500/50 transition-colors">
-              <div className="h-36 bg-slate-50 rounded-xl overflow-hidden flex items-center justify-center border border-slate-200 relative">
+              <div className="h-36 bg-slate-50 rounded-xl overflow-x-auto flex items-center justify-center border border-slate-200 relative">
                 {m.mimeType.startsWith('image') ? (
                   <img src={m.url} alt={m.originalName} className="h-full w-full object-cover" />
                 ) : (

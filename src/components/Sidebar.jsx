@@ -12,7 +12,7 @@ import {
   FaSignOutAlt 
 } from 'react-icons/fa';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const { logout } = useAuth();
 
@@ -21,12 +21,22 @@ const Sidebar = () => {
     { label: 'Courses', path: '/admin/courses', icon: <FaBook /> },
     { label: 'Modules', path: '/admin/modules', icon: <FaLayerGroup /> },
     { label: 'Topics', path: '/admin/topics', icon: <FaListAlt /> },
-    { label: 'Media Library', path: '/admin/media', icon: <FaImages /> },
     { label: 'Enquiries', path: '/admin/enquiries', icon: <FaEnvelope /> },
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col justify-between h-screen sticky top-0 z-40 shadow-sm">
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/50 z-40 md:hidden transition-opacity"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      
+      <aside className={`fixed md:static inset-y-0 left-0 w-64 bg-white border-r border-slate-200 flex flex-col justify-between h-screen z-50 shadow-xl md:shadow-sm transform transition-transform duration-300 ease-in-out shrink-0 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
       
       <div>
         {/* Brand Header */}
@@ -40,13 +50,14 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation Items */}
-        <nav className="p-3 space-y-1">
+        <nav className="p-3 space-y-1 flex flex-col overflow-y-auto">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/admin' && location.pathname.startsWith(item.path));
             return (
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-semibold transition-all ${
                   isActive
                     ? 'bg-blue-50 text-blue-800 font-bold border-l-4 border-blue-700'
@@ -73,6 +84,7 @@ const Sidebar = () => {
       </div>
 
     </aside>
+    </>
   );
 };
 

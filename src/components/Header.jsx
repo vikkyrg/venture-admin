@@ -1,17 +1,21 @@
 import { useAuth } from '../context/AuthContext';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaBars } from 'react-icons/fa';
 
-const Header = () => {
+const Header = ({ onMenuClick }) => {
   const { user } = useAuth();
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm">
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-blue-600" />
-        <span className="text-xs font-semibold text-slate-500">System API: Active</span>
+    <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm shrink-0">
+      <div className="flex items-center md:hidden">
+        <button
+          onClick={onMenuClick}
+          className="p-2 -ml-2 mr-2 text-slate-600 hover:text-blue-700 focus:outline-none"
+        >
+          <FaBars className="text-xl" />
+        </button>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex-1 md:flex-none flex justify-end ml-auto">
         <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-lg">
           <FaUserCircle className="text-blue-700 text-lg" />
           <div className="text-left">
