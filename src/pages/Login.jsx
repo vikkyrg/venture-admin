@@ -5,7 +5,7 @@ import logo from '../assets/logo.png';
 import { FaLock, FaEnvelope } from 'react-icons/fa';
 
 const Login = () => {
-  const [email, setEmail] = useState('admin@venturesoft.com');
+  const [email, setEmail] = useState('admin@Venture Soft Tech.com');
   const [password, setPassword] = useState('admin123');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -34,7 +34,7 @@ const Login = () => {
         
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <img src={logo} alt="Venture Soft Logo" className="h-12 w-auto mx-auto object-contain mb-2" />
+          <img src={logo} alt="Venture Soft Tech Logo" className="h-12 w-auto mx-auto object-contain mb-2" />
           <h1 className="text-2xl font-extrabold text-slate-900">System Admin Login</h1>
           <p className="text-xs text-slate-500">Enter your administrative credentials to continue.</p>
         </div>
@@ -55,7 +55,7 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@venturesoft.com"
+                placeholder="admin@Venture Soft Tech.com"
                 className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
@@ -86,7 +86,7 @@ const Login = () => {
         </form>
 
         <div className="text-center pt-2 border-t border-slate-100 text-[11px] text-slate-400">
-          Default seed credentials: <code className="text-blue-700 font-bold font-mono">admin@venturesoft.com / admin123</code>
+          Default seed credentials: <code className="text-blue-700 font-bold font-mono">admin@Venture Soft Tech.com / admin123</code>
         </div>
 
       </div>

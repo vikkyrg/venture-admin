@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {/* Brand Header */}
         <div className="p-6 border-b border-slate-100">
           <Link to="/admin" className="flex items-center gap-3">
-            <img src={logo} alt="Venture Soft Admin" className="h-9 w-auto object-contain" />
+            <img src={logo} alt="Venture Soft Tech Admin" className="h-9 w-auto object-contain" />
           </Link>
           <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 mt-2 block">
             Admin Control Center

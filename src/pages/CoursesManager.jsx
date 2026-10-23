@@ -177,21 +177,23 @@ const CoursesManager = () => {
                     <Badge status={c.status} />
                   </button>
                 </td>
-                <td className="py-4 px-6 text-right space-x-2">
-                  <button
-                    onClick={() => handleOpenModal(c)}
-                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-blue-700 border border-slate-200 transition-colors"
-                    title="Edit"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(c._id)}
-                    className="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-rose-600 border border-slate-200 transition-colors"
-                    title="Delete"
-                  >
-                    <FaTrash />
-                  </button>
+                <td className="py-4 px-6">
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => handleOpenModal(c)}
+                      className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-blue-700 border border-slate-200 transition-colors"
+                      title="Edit"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(c._id)}
+                      className="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-rose-600 border border-slate-200 transition-colors"
+                      title="Delete"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

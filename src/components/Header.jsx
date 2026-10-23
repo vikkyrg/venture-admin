@@ -20,7 +20,7 @@ const Header = ({ onMenuClick }) => {
           <FaUserCircle className="text-blue-700 text-lg" />
           <div className="text-left">
             <p className="text-xs font-bold text-slate-900 leading-none">{user?.name || 'Venture Admin'}</p>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{user?.email || 'admin@venturesoft.com'}</p>
+            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{user?.email || 'admin@Venture Soft Tech.com'}</p>
           </div>
         </div>
       </div>
